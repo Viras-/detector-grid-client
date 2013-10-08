@@ -23,4 +23,5 @@ package at.technikum_wien.detectorgridclient;
 public class TagInformation {
     public String tagCode;
     public int distance;
+    public int readerId;
 }

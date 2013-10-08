@@ -23,6 +23,10 @@ import at.technikum_wien.detectorgridclient.TagInformation;
  * @author wkoller
  */
 public interface Listener {
+    /**
+     * Called to init the search for a specific tag
+     * @param tagCode
+     * @return 
+     */
     public abstract TagInformation findTag(String tagCode);
-    public abstract int getReaderId();
 }

@@ -14,38 +14,25 @@
  * You should have received a copy of the GNU General Public License
  * along with DetectorGridClient.  If not, see <http://www.gnu.org/licenses/>.
  */
-package at.technikum_wien.detectorgridclient.communication.spread;
+package at.technikum_wien.detectorgridclient.reader.openbeacon;
 
+import at.technikum_wien.detectorgridclient.TagInformation;
 import at.technikum_wien.detectorgridclient.communication.Listener;
-import spread.BasicMessageListener;
-import spread.SpreadMessage;
+import at.technikum_wien.detectorgridclient.reader.Reader;
 
 /**
- * Wrapper class for detector-grid-client listeners to Spread MessageListeners
+ *
  * @author wkoller
  */
-public class SpreadListener implements BasicMessageListener {
-    /**
-     * Reference to detector-grid client listeners
-     */
-    protected Listener listener = null;
+public class USBReader implements Reader, Listener {
 
-    /**
-     * Construct the SpreadListener to wrap the given detector-grid client listener
-     * @param lstnr 
-     */
-    public SpreadListener(Listener lstnr) {
-        listener = lstnr;
+    @Override
+    public String getReaderUUID() {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    /**
-     * Called when a message from spread is received
-     * @param message 
-     */
     @Override
-    public void messageReceived(SpreadMessage message) {
-        if( message.isRegular() ) {
-            System.out.println("New Message data: " + message.getData());
-        }
+    public TagInformation findTag(String tagCode) {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }

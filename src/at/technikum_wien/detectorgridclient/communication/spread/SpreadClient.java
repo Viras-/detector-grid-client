@@ -21,6 +21,7 @@ import at.technikum_wien.detectorgridclient.communication.Listener;
 import java.net.InetAddress;
 import java.util.HashMap;
 import spread.SpreadConnection;
+import spread.SpreadGroup;
 
 /**
  *
@@ -28,13 +29,24 @@ import spread.SpreadConnection;
  */
 public class SpreadClient implements Client {
     protected SpreadConnection spreadConnection = null;
+    protected SpreadGroup spreadGroup = null;
     protected HashMap<Listener,SpreadListener> listeners = new HashMap<>();
 
+    /**
+     * Init the client and open connection to spread daemon
+     * @param address
+     * @return 
+     */
     @Override
     public boolean init(String address) {
         try {
+            // open the connection to the spread daemon
             spreadConnection = new SpreadConnection();
             spreadConnection.connect(InetAddress.getByName(address), 0, "private", true, false);
+            
+            // join the default group for the detector grid application
+            spreadGroup = new SpreadGroup();
+            spreadGroup.join(spreadConnection, "detectorGrid");
             
             return true;
         }
@@ -45,18 +57,31 @@ public class SpreadClient implements Client {
         return false;
     }
 
+    /**
+     * Listen to messages from spread
+     * @param listener
+     * @return 
+     */
     @Override
     public boolean addListener(Listener listener) {
+        // add a new spreadlistener wrapper
         SpreadListener spreadListener = new SpreadListener(listener);
         spreadConnection.add(spreadListener);
         
+        // keep reference to added listener
         listeners.put(listener, spreadListener);
         
         return true;
     }
 
+    /**
+     * Remove a listener
+     * @param listener
+     * @return 
+     */
     @Override
     public boolean removeListener(Listener listener) {
+        // remove listener from spread and all references to the object
         SpreadListener spreadListener = listeners.remove(listener);
         if( spreadListener != null ) {
             spreadConnection.remove(spreadListener);

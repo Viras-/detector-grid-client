@@ -16,6 +16,9 @@
  */
 package at.technikum_wien.detectorgridclient;
 
+import at.technikum_wien.detectorgridclient.communication.spread.SpreadClient;
+import at.technikum_wien.detectorgridclient.reader.openbeacon.USBReader;
+
 /**
  *
  * @author wkoller
@@ -26,6 +29,17 @@ public class DetectorGridClient {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        SpreadClient spreadClient = new SpreadClient();
+        spreadClient.init("localhost");
         
+        USBReader uSBReader = new USBReader();
+        spreadClient.addListener(uSBReader);
+
+        try {
+            spreadClient.wait();
+        }
+        catch(Exception e) {
+            
+        }
     }
 }

@@ -21,5 +21,9 @@ package at.technikum_wien.detectorgridclient.reader;
  * @author wkoller
  */
 public interface Reader {
-    
+    /**
+     * Get the UUID of this reader
+     * @return UUID of reader
+     */
+    public abstract String getReaderUUID();
 }
