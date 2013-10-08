@@ -21,7 +21,7 @@ package at.technikum_wien.detectorgridclient.communication;
  * @author wkoller
  */
 public interface Client {
-    public abstract boolean init();
+    public abstract boolean init(String address);
     
     public abstract boolean addListener(Listener listener);
     public abstract boolean removeListener(Listener listener);

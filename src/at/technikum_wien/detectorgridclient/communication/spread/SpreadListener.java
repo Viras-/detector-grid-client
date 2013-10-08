@@ -14,18 +14,27 @@
  * You should have received a copy of the GNU General Public License
  * along with DetectorGridClient.  If not, see <http://www.gnu.org/licenses/>.
  */
-package at.technikum_wien.detectorgridclient;
+package at.technikum_wien.detectorgridclient.communication.spread;
+
+import at.technikum_wien.detectorgridclient.communication.Listener;
+import spread.BasicMessageListener;
+import spread.SpreadMessage;
 
 /**
  *
  * @author wkoller
  */
-public class DetectorGridClient {
+public class SpreadListener implements BasicMessageListener {
+    protected Listener listener = null;
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        
+    public SpreadListener(Listener lstnr) {
+        listener = lstnr;
+    }
+
+    @Override
+    public void messageReceived(SpreadMessage message) {
+        if( message.isRegular() ) {
+            System.out.println("New Message data: " + message.getData());
+        }
     }
 }

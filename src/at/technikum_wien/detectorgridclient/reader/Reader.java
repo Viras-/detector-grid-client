@@ -14,12 +14,12 @@
  * You should have received a copy of the GNU General Public License
  * along with DetectorGridClient.  If not, see <http://www.gnu.org/licenses/>.
  */
-package at.technikum_wien.detectorgridclient.communication;
+package at.technikum_wien.detectorgridclient.reader;
 
 /**
  *
  * @author wkoller
  */
-public class SpreadClient implements Client {
+public interface Reader {
     
 }
