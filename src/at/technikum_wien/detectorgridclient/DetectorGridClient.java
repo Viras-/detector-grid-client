@@ -18,6 +18,8 @@ package at.technikum_wien.detectorgridclient;
 
 import at.technikum_wien.detectorgridclient.communication.spread.SpreadClient;
 import at.technikum_wien.detectorgridclient.reader.openbeacon.USBReader;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -34,12 +36,14 @@ public class DetectorGridClient {
         
         USBReader uSBReader = new USBReader();
         spreadClient.addListener(uSBReader);
-
-        try {
-            spreadClient.wait();
-        }
-        catch(Exception e) {
-            
+        
+        // let the listening threads do their work...
+        while(true) {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(DetectorGridClient.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 }
