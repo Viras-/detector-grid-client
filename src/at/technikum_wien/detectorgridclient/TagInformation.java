@@ -16,12 +16,47 @@
  */
 package at.technikum_wien.detectorgridclient;
 
+import at.technikum_wien.detectorgridclient.communication.Listener;
+
 /**
  *
  * @author wkoller
  */
 public class TagInformation {
-    public String tagCode;
-    public int distance;
+    /**
+     * Tag for message to be sent to server
+     */
+    public static final String MESSAGE_TAG = "tagFound";
+    
+    /**
+     * Id of reader who discovered this tag
+     */
     public int readerId;
+    
+    /**
+     * Id / Code of tag
+     */
+    public String tagCode;
+    
+    /**
+     * Distance to tag from this reader
+     */
+    public int distance;
+
+    /**
+     * Convert this tag information to a message string which can be sent to the server
+     * @return 
+     */
+    public String toMessage() {
+        // begin message with message_tag
+        String messageContent = MESSAGE_TAG + Listener.MESSAGE_SEPARATOR;
+        // add the reader id
+        messageContent += readerId + Listener.MESSAGE_SEPARATOR;
+        // add the tag code
+        messageContent += tagCode + Listener.MESSAGE_SEPARATOR;
+        // add the distance
+        messageContent += distance + Listener.MESSAGE_SEPARATOR;
+        
+        return messageContent;
+    }
 }
