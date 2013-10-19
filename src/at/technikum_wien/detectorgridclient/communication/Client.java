@@ -16,6 +16,8 @@
  */
 package at.technikum_wien.detectorgridclient.communication;
 
+import at.technikum_wien.detectorgridclient.TagInformation;
+
 /**
  *
  * @author wkoller
@@ -25,4 +27,11 @@ public interface Client {
     
     public abstract boolean addListener(Listener listener);
     public abstract boolean removeListener(Listener listener);
+
+    /**
+     * communicate a found tag to the server over this client
+     * @param tagInformation
+     * @return 
+     */
+    public abstract boolean foundTag(TagInformation tagInformation);
 }
