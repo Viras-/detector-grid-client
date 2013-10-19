@@ -22,11 +22,46 @@ import at.technikum_wien.detectorgridclient.TagInformation;
  *
  * @author wkoller
  */
-public interface Listener {
+public abstract class Listener {
+
+    /**
+     * Message protocol separator
+     */
+    public static final String MESSAGE_SEPARATOR = "\u001E";
+
     /**
      * Called to init the search for a specific tag
+     *
      * @param tagCode
-     * @return 
+     * @return
      */
     public abstract TagInformation findTag(String tagCode);
+
+    /**
+     * Handle an incoming message and trigger the action for it
+     *
+     * @param messageComponents
+     * @return
+     * @throws Exception
+     */
+    public void handleMessage(String[] messageComponents) throws Exception {
+        // check if we have at least one message component
+        if(messageComponents.length <= 0) {
+            throw new Exception("Invalid message components passed to 'handleMessage'");
+        }
+        
+        // determine action and trigger function for it
+        switch (messageComponents[0]) {
+            case "findTag":
+                // check for tag-code to find in message
+                if (messageComponents.length >= 2) {
+                    this.findTag(messageComponents[1]);
+                } else {
+                    throw new Exception("Invalid Message: '" + messageComponents[0] + "' - missing payload!");
+                }
+            // all other cases are invalid messages
+            default:
+                throw new Exception("Unknown Message: '" + messageComponents[0] + "'");
+        }
+    }
 }

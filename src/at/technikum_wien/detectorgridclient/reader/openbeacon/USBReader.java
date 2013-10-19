@@ -24,7 +24,7 @@ import at.technikum_wien.detectorgridclient.reader.Reader;
  *
  * @author wkoller
  */
-public class USBReader implements Reader, Listener {
+public class USBReader extends Listener implements Reader {
 
     @Override
     public String getReaderUUID() {

@@ -17,6 +17,9 @@
 package at.technikum_wien.detectorgridclient.communication.spread;
 
 import at.technikum_wien.detectorgridclient.communication.Listener;
+import java.io.UnsupportedEncodingException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import spread.BasicMessageListener;
 import spread.SpreadMessage;
 
@@ -45,7 +48,21 @@ public class SpreadListener implements BasicMessageListener {
     @Override
     public void messageReceived(SpreadMessage message) {
         if( message.isRegular() ) {
-            System.out.println("New Message data: " + message.getData());
+            try {
+                String messageContent = new String(message.getData(), "UTF-8").trim();
+                Logger.getLogger(SpreadListener.class.getName()).log(Level.FINE, "New Message: ''{0}''", messageContent);
+                
+                // sepearate message into components and start actions from it
+                String[] messageComponents = messageContent.split(Listener.MESSAGE_SEPARATOR);
+                try {
+                    listener.handleMessage(messageComponents);
+                } catch (Exception ex) {
+                    Logger.getLogger(SpreadListener.class.getName()).log(Level.SEVERE, "Error while handling message", ex);
+                }
+                
+            } catch (UnsupportedEncodingException ex) {
+                Logger.getLogger(SpreadListener.class.getName()).log(Level.SEVERE, "Error while decoding message content", ex);
+            }
         }
     }
 }

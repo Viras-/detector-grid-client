@@ -75,12 +75,12 @@ public class DetectorGridClient {
                     try {
                         Thread.sleep(1000);
                     } catch (InterruptedException ex) {
-                        Logger.getLogger(DetectorGridClient.class.getName()).log(Level.SEVERE, null, ex);
+                        Logger.getLogger(DetectorGridClient.class.getName()).log(Level.SEVERE, "Error while executing main loop", ex);
                     }
                 }
             }
         } catch (ParseException ex) {
-            Logger.getLogger(DetectorGridClient.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DetectorGridClient.class.getName()).log(Level.SEVERE, "Error while parsing command line parameters", ex);
         }
     }
 }
