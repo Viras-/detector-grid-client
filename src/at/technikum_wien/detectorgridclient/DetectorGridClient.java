@@ -34,7 +34,7 @@ import org.apache.commons.cli.ParseException;
 public class DetectorGridClient {
     protected String host = "";
 
-    public DetectorGridClient(String hst) {
+    public DetectorGridClient(String hst) throws Exception {
         host = hst;
         
         SpreadClient spreadClient = new SpreadClient();
@@ -66,9 +66,12 @@ public class DetectorGridClient {
             else {
                 // fetch the host from the options
                 String host = cmd.getOptionValue("h", "localhost");
-
-                // create class instance to start the logic
-                new DetectorGridClient(host);
+                try {
+                    // create class instance to start the logic
+                    new DetectorGridClient(host);
+                } catch (Exception ex) {
+                    Logger.getLogger(DetectorGridClient.class.getName()).log(Level.SEVERE, "Unable to start main detector grid", ex);
+                }
 
                 // let the listening threads do their work...
                 while(true) {
