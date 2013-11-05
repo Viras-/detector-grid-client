@@ -35,7 +35,15 @@ import java.util.logging.Logger;
  * @author wkoller
  */
 public class USBReader extends Listener implements Reader, SerialPortEventListener {
+    /**
+     * Define the serial port to listen on
+     */
     public static final String COMM_PORT = "/dev/ttyS80";
+    
+    /**
+     * Separator for message coming in from serial port
+     */
+    public static final String SERIAL_SEPARATOR = ": ";
     
     private SerialPort serialPort = null;
     private InputStream serialPortReader = null;
@@ -76,6 +84,7 @@ public class USBReader extends Listener implements Reader, SerialPortEventListen
             int data = 0;
             int len = 0;
 
+            // read each byte from the serial buffer
             while( (data = serialPortReader.read()) > -1 ) {
                 if( data == '\n' ) {
                     break;
@@ -83,10 +92,31 @@ public class USBReader extends Listener implements Reader, SerialPortEventListen
                 
                 serialBuffer[len++] = (byte) data;
             }
+            // convert byte array to a string
+            String serialBufferString = new String(serialBuffer,0,len).trim();
+
+            // debug output of serial buffer content
+            Logger.getLogger(USBReader.class.getName()).log(Level.FINEST, serialBufferString);
             
-            System.out.print(new String(serialBuffer,0,len));
-        } catch (IOException ex) {
-            Logger.getLogger(USBReader.class.getName()).log(Level.SEVERE, null, ex);
+            // Analyze message and check for distance reading
+            String serialBufferComponents[] = serialBufferString.split(SERIAL_SEPARATOR);
+            if( serialBufferComponents.length > 1 ) {
+                switch(serialBufferComponents[0]) {
+                    case "DIST":
+                        // split DIST message into its components
+                        String distMsgComponents[] = serialBufferComponents[1].split(",");
+                        if( distMsgComponents.length < 2 ) {
+                            throw new Exception("Invalid DIST Message received: " + serialBufferComponents[1]);
+                        }
+                        
+                        System.err.println("DIST msg received: TX=" + distMsgComponents[0] + " / TagID=" + distMsgComponents[1]);
+                        
+                        break;
+                }
+            }
+            
+        } catch (Exception ex) {
+            Logger.getLogger(USBReader.class.getName()).log(Level.SEVERE, "Unable to read from SerialPort of USB Reader", ex);
         }
     }
 }
