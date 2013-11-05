@@ -27,7 +27,7 @@ import spread.SpreadMessage;
  * Wrapper class for detector-grid-client listeners to Spread MessageListeners
  * @author wkoller
  */
-public class SpreadListener implements BasicMessageListener {
+public class SpreadMessageListener implements BasicMessageListener {
     /**
      * Reference to detector-grid client listeners
      */
@@ -37,7 +37,7 @@ public class SpreadListener implements BasicMessageListener {
      * Construct the SpreadListener to wrap the given detector-grid client listener
      * @param lstnr 
      */
-    public SpreadListener(Listener lstnr) {
+    public SpreadMessageListener(Listener lstnr) {
         listener = lstnr;
     }
 
@@ -50,18 +50,18 @@ public class SpreadListener implements BasicMessageListener {
         if( message.isRegular() ) {
             try {
                 String messageContent = new String(message.getData(), "UTF-8").trim();
-                Logger.getLogger(SpreadListener.class.getName()).log(Level.FINE, "New Message: ''{0}''", messageContent);
+                Logger.getLogger(SpreadMessageListener.class.getName()).log(Level.FINE, "New Message: ''{0}''", messageContent);
                 
                 // sepearate message into components and start actions from it
                 String[] messageComponents = messageContent.split(Listener.MESSAGE_SEPARATOR);
                 try {
                     listener.handleMessage(messageComponents);
                 } catch (Exception ex) {
-                    Logger.getLogger(SpreadListener.class.getName()).log(Level.SEVERE, "Error while handling message", ex);
+                    Logger.getLogger(SpreadMessageListener.class.getName()).log(Level.SEVERE, "Error while handling message", ex);
                 }
                 
             } catch (UnsupportedEncodingException ex) {
-                Logger.getLogger(SpreadListener.class.getName()).log(Level.SEVERE, "Error while decoding message content", ex);
+                Logger.getLogger(SpreadMessageListener.class.getName()).log(Level.SEVERE, "Error while decoding message content", ex);
             }
         }
     }

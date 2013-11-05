@@ -56,7 +56,7 @@ public class SpreadClient implements Client {
     /**
      * List of all listeners in conjunction with their spread listener
      */
-    protected HashMap<Listener, SpreadListener> listeners = new HashMap<>();
+    protected HashMap<Listener, SpreadMessageListener> listeners = new HashMap<>();
 
     /**
      * Init the client and open connection to spread daemon
@@ -92,7 +92,7 @@ public class SpreadClient implements Client {
     @Override
     public boolean addListener(Listener listener) {
         // add a new spreadlistener wrapper
-        SpreadListener spreadListener = new SpreadListener(listener);
+        SpreadMessageListener spreadListener = new SpreadMessageListener(listener);
         spreadConnection.add(spreadListener);
 
         // keep reference to added listener
@@ -110,7 +110,7 @@ public class SpreadClient implements Client {
     @Override
     public boolean removeListener(Listener listener) {
         // remove listener from spread and all references to the object
-        SpreadListener spreadListener = listeners.remove(listener);
+        SpreadMessageListener spreadListener = listeners.remove(listener);
         if (spreadListener != null) {
             spreadConnection.remove(spreadListener);
             return true;
