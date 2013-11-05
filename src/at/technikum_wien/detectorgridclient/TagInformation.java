@@ -31,7 +31,7 @@ public class TagInformation {
     /**
      * Id of reader who discovered this tag
      */
-    public int readerId;
+    public String readerId;
     
     /**
      * Id / Code of tag

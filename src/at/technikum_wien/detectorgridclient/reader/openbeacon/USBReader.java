@@ -27,6 +27,8 @@ import gnu.io.SerialPortEventListener;
 import gnu.io.UnsupportedCommOperationException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -61,6 +63,16 @@ public class USBReader extends Listener implements Reader, SerialPortEventListen
     private byte[] serialBuffer = new byte[1024];
     
     /**
+     * internal lookup table for previously found tags
+     */
+    protected HashMap<String,TagInformation> tagTable = new HashMap<>();
+    
+    /**
+     * reader UUID, randomly generated for now
+     */
+    protected String readerUUID = UUID.randomUUID().toString();
+    
+    /**
      * Initialize the OpenBeacon USB reader and start reading from it
      * @throws Exception 
      */
@@ -91,12 +103,12 @@ public class USBReader extends Listener implements Reader, SerialPortEventListen
 
     @Override
     public String getReaderUUID() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return readerUUID;
     }
 
     @Override
     public TagInformation findTag(String tagCode) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return tagTable.get(tagCode);
     }
 
     /**
@@ -137,6 +149,15 @@ public class USBReader extends Listener implements Reader, SerialPortEventListen
                         
                         // logging of DIST msg
                         Logger.getLogger(USBReader.class.getName()).log(Level.FINE, "DIST msg received: TX=" + distMsgComponents[0] + " / TagID=" + distMsgComponents[1]);
+
+                        // create a tag information for the found tag
+                        TagInformation tagInformation = new TagInformation();
+                        tagInformation.distance = Integer.parseInt(distMsgComponents[0]);
+                        tagInformation.readerId = this.getReaderUUID();
+                        tagInformation.tagCode = distMsgComponents[1];
+                        
+                        // add the tag to the internal storage table for later lookup
+                        tagTable.put(tagInformation.tagCode, tagInformation);
                         break;
                 }
             }
