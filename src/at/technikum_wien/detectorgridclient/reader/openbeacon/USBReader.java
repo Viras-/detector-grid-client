@@ -44,26 +44,47 @@ public class USBReader extends Listener implements Reader, SerialPortEventListen
      * Separator for message coming in from serial port
      */
     public static final String SERIAL_SEPARATOR = ": ";
-    
-    private SerialPort serialPort = null;
-    private InputStream serialPortReader = null;
-    private byte[] serialBuffer = new byte[1024];
 
+    /**
+     * Serial port handler variable
+     */
+    private SerialPort serialPort = null;
+    
+    /**
+     * input stream for reading fomr serial port
+     */
+    private InputStream serialPortReader = null;
+    
+    /**
+     * buffer for reading from serial port (since it is using byte based reading)
+     */
+    private byte[] serialBuffer = new byte[1024];
+    
+    /**
+     * Initialize the OpenBeacon USB reader and start reading from it
+     * @throws Exception 
+     */
     public USBReader() throws Exception {
+        // get the identifier for the specified comm port
         CommPortIdentifier commPortIdentifier = CommPortIdentifier.getPortIdentifier(COMM_PORT);
         if( commPortIdentifier.isCurrentlyOwned() ) {
             throw new IllegalAccessException("Comm port is currently in use");
         }
         
+        // open the port and check if we have a serial port
         CommPort commPort = commPortIdentifier.open(this.getClass().getName(), 2000);
         if( !(commPort instanceof SerialPort) ) {
             throw new UnsupportedCommOperationException("Only Serial Ports are supported");
         }
         serialPort = (SerialPort) commPort;
+        
+        // configure serial port to use the openbeacon specific settings
         serialPort.setSerialPortParams(115200, SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_NONE);
         
+        // fetch a reference to the input stream for later reading
         serialPortReader = serialPort.getInputStream();
         
+        // use event based reading by subscribing
         serialPort.addEventListener(this);
         serialPort.notifyOnDataAvailable(true);
     }
@@ -78,9 +99,14 @@ public class USBReader extends Listener implements Reader, SerialPortEventListen
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    /**
+     * called whenever there is data available from the serial port
+     * @param spe 
+     */
     @Override
     public void serialEvent(SerialPortEvent spe) {
         try {
+            // helper values for reading byte-whise from the serial port
             int data = 0;
             int len = 0;
 
@@ -109,8 +135,8 @@ public class USBReader extends Listener implements Reader, SerialPortEventListen
                             throw new Exception("Invalid DIST Message received: " + serialBufferComponents[1]);
                         }
                         
-                        System.err.println("DIST msg received: TX=" + distMsgComponents[0] + " / TagID=" + distMsgComponents[1]);
-                        
+                        // logging of DIST msg
+                        Logger.getLogger(USBReader.class.getName()).log(Level.FINE, "DIST msg received: TX=" + distMsgComponents[0] + " / TagID=" + distMsgComponents[1]);
                         break;
                 }
             }
