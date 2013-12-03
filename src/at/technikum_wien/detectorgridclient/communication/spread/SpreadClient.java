@@ -16,7 +16,7 @@
  */
 package at.technikum_wien.detectorgridclient.communication.spread;
 
-import at.technikum_wien.detectorgridclient.TagInformation;
+import at.technikum_wien.detectorgrid.TagInformation;
 import at.technikum_wien.detectorgridclient.communication.Client;
 import at.technikum_wien.detectorgridclient.communication.Listener;
 import java.io.UnsupportedEncodingException;

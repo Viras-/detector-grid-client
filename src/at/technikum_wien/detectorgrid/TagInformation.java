@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with DetectorGridClient.  If not, see <http://www.gnu.org/licenses/>.
  */
-package at.technikum_wien.detectorgridclient;
+package at.technikum_wien.detectorgrid;
 
 import at.technikum_wien.detectorgridclient.communication.Listener;
 

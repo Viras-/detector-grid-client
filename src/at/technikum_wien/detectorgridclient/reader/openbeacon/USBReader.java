@@ -16,7 +16,7 @@
  */
 package at.technikum_wien.detectorgridclient.reader.openbeacon;
 
-import at.technikum_wien.detectorgridclient.TagInformation;
+import at.technikum_wien.detectorgrid.TagInformation;
 import at.technikum_wien.detectorgridclient.communication.Listener;
 import at.technikum_wien.detectorgridclient.reader.Reader;
 import gnu.io.CommPort;

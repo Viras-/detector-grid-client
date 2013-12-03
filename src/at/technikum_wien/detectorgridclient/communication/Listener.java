@@ -16,7 +16,7 @@
  */
 package at.technikum_wien.detectorgridclient.communication;
 
-import at.technikum_wien.detectorgridclient.TagInformation;
+import at.technikum_wien.detectorgrid.TagInformation;
 
 /**
  *
