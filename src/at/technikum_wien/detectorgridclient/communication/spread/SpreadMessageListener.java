@@ -32,13 +32,16 @@ public class SpreadMessageListener implements BasicMessageListener {
      * Reference to detector-grid client listeners
      */
     protected Listener listener = null;
+    
+    protected SpreadClient spreadClient = null;
 
     /**
      * Construct the SpreadListener to wrap the given detector-grid client listener
      * @param lstnr 
      */
-    public SpreadMessageListener(Listener lstnr) {
+    public SpreadMessageListener(Listener lstnr, SpreadClient sprdClnt) {
         listener = lstnr;
+        spreadClient = sprdClnt;
     }
 
     /**
@@ -55,7 +58,7 @@ public class SpreadMessageListener implements BasicMessageListener {
                 // sepearate message into components and start actions from it
                 String[] messageComponents = messageContent.split(Listener.MESSAGE_SEPARATOR);
                 try {
-                    listener.handleMessage(messageComponents);
+                    spreadClient.handleMessage(messageComponents);
                 } catch (Exception ex) {
                     Logger.getLogger(SpreadMessageListener.class.getName()).log(Level.SEVERE, "Error while handling message", ex);
                 }
