@@ -42,6 +42,11 @@ public class TagInformation {
      * Distance to tag from this reader
      */
     public int distance;
+    
+    /**
+     *  Tick of reader when the tag was seen
+     */
+    public int seenTick;
 
     /**
      * Convert this tag information to a message string which can be sent to the server
@@ -56,6 +61,8 @@ public class TagInformation {
         messageContent += tagCode + Listener.MESSAGE_SEPARATOR;
         // add the distance
         messageContent += distance + Listener.MESSAGE_SEPARATOR;
+        // add the seen tick
+        messageContent += seenTick;
         
         return messageContent;
     }

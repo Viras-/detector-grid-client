@@ -40,7 +40,7 @@ public class USBReader extends Listener implements Reader, SerialPortEventListen
     /**
      * Define the serial port to listen on
      */
-    public static final String COMM_PORT = "/dev/ttyS80";
+    public static final String COMM_PORT = "/dev/ttyACM0";
     
     /**
      * Separator for message coming in from serial port
@@ -140,21 +140,22 @@ public class USBReader extends Listener implements Reader, SerialPortEventListen
             String serialBufferComponents[] = serialBufferString.split(SERIAL_SEPARATOR);
             if( serialBufferComponents.length > 1 ) {
                 switch(serialBufferComponents[0]) {
-                    case "DIST":
-                        // split DIST message into its components
-                        String distMsgComponents[] = serialBufferComponents[1].split(",");
-                        if( distMsgComponents.length < 2 ) {
-                            throw new Exception("Invalid DIST Message received: " + serialBufferComponents[1]);
+                    case "TAG":
+                        // split TAG message into its components
+                        String tagMsgComponents[] = serialBufferComponents[1].split(",");
+                        if( tagMsgComponents.length < 3 ) {
+                            throw new Exception("Invalid TAG Message received: " + serialBufferComponents[1]);
                         }
                         
                         // logging of DIST msg
-                        Logger.getLogger(USBReader.class.getName()).log(Level.FINE, "DIST msg received: TX=" + distMsgComponents[0] + " / TagID=" + distMsgComponents[1]);
+                        Logger.getLogger(USBReader.class.getName()).log(Level.INFO, "TAG msg received: TX=" + tagMsgComponents[1] + " / TagID=" + tagMsgComponents[0] + " / seenTick=" + tagMsgComponents[2]);
 
                         // create a tag information for the found tag
                         TagInformation tagInformation = new TagInformation();
-                        tagInformation.distance = Integer.parseInt(distMsgComponents[0]);
+                        tagInformation.distance = Integer.parseInt(tagMsgComponents[1].trim());
                         tagInformation.readerId = this.getReaderUUID();
-                        tagInformation.tagCode = distMsgComponents[1];
+                        tagInformation.tagCode = tagMsgComponents[0].trim();
+                        tagInformation.seenTick = Integer.parseInt(tagMsgComponents[2].trim());
                         
                         // add the tag to the internal storage table for later lookup
                         tagTable.put(tagInformation.tagCode, tagInformation);
