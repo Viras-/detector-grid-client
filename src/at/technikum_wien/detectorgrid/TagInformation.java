@@ -61,4 +61,14 @@ public class TagInformation {
         
         return messageContent;
     }
+    
+    public static TagInformation fromMessage(String[] messageComponents) {
+        TagInformation tagInformation = new TagInformation();
+        tagInformation.readerId = messageComponents[1];
+        tagInformation.tagCode = messageComponents[2];
+        tagInformation.distance = Integer.parseInt(messageComponents[3]);
+        tagInformation.seenTick = Integer.parseInt(messageComponents[4]);
+        
+        return tagInformation;
+    }
 }
