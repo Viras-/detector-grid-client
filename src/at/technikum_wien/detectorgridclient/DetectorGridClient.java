@@ -18,6 +18,7 @@ package at.technikum_wien.detectorgridclient;
 
 import at.technikum_wien.detectorgridclient.communication.spread.SpreadClient;
 import at.technikum_wien.detectorgridclient.reader.openbeacon.USBReader;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.cli.BasicParser;
@@ -34,13 +35,13 @@ import org.apache.commons.cli.ParseException;
 public class DetectorGridClient {
     protected String host = "";
 
-    public DetectorGridClient(String hst) throws Exception {
+    public DetectorGridClient(String hst, String uuid) throws Exception {
         host = hst;
         
         SpreadClient spreadClient = new SpreadClient();
         spreadClient.init(host);
         
-        USBReader uSBReader = new USBReader();
+        USBReader uSBReader = new USBReader(uuid);
         spreadClient.addListener(uSBReader);
     }
     
@@ -53,6 +54,7 @@ public class DetectorGridClient {
         Options options = new Options();
         options.addOption("h", "host", true, "Name of host to connect to (defaults to localhost)");
         options.addOption("?", "help", false, "Display help information");
+        options.addOption("u", "uuid", true, "UUID to use for this reader");
         
         CommandLineParser clp = new BasicParser();
         try {
@@ -64,11 +66,14 @@ public class DetectorGridClient {
                 helpFormatter.printHelp(DetectorGridClient.class.getSimpleName(), options);
             }
             else {
+                // fetch the UUID from the options
+                String uuid = cmd.getOptionValue("uuid", UUID.randomUUID().toString());
+                
                 // fetch the host from the options
                 String host = cmd.getOptionValue("h", "localhost");
                 try {
                     // create class instance to start the logic
-                    new DetectorGridClient(host);
+                    new DetectorGridClient(host, uuid);
                 } catch (Exception ex) {
                     Logger.getLogger(DetectorGridClient.class.getName()).log(Level.SEVERE, "Unable to start main detector grid", ex);
                 }

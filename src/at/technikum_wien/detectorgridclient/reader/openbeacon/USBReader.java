@@ -69,13 +69,16 @@ public class USBReader implements CommunicationListener, Reader, SerialPortEvent
     /**
      * reader UUID, randomly generated for now
      */
-    protected String readerUUID = UUID.randomUUID().toString();
+    protected String readerUUID = null;
     
     /**
      * Initialize the OpenBeacon USB reader and start reading from it
      * @throws Exception 
      */
-    public USBReader() throws Exception {
+    public USBReader(String uuid) throws Exception {
+        // assigned uuid
+        readerUUID = uuid;
+        
         // get the identifier for the specified comm port
         CommPortIdentifier commPortIdentifier = CommPortIdentifier.getPortIdentifier(COMM_PORT);
         if( commPortIdentifier.isCurrentlyOwned() ) {
