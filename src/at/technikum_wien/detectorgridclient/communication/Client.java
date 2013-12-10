@@ -59,26 +59,25 @@ public abstract class Client implements CommunicationProtocol {
         }
         
         // determine action and trigger function for it
-        switch (messageComponents[0]) {
-            case MESSAGE_FIND:
-                // check for tag-code to find in message
-                if (messageComponents.length >= 2) {
-                    Iterator<CommunicationListener> l_it = listeners.iterator();
-                    while( l_it.hasNext() ) {
-                        CommunicationListener currListener = l_it.next();
-                        
-                        // ask listener for tag information
-                        TagInformation tagInformation = currListener.findTag(messageComponents[1]);
-                        if( tagInformation != null ) {
-                            this.foundTag(tagInformation);
-                        }
+        if( messageComponents[0].equals(MESSAGE_FIND) ) {
+            // check for tag-code to find in message
+            if (messageComponents.length >= 2) {
+                Iterator<CommunicationListener> l_it = listeners.iterator();
+                while( l_it.hasNext() ) {
+                    CommunicationListener currListener = l_it.next();
+
+                    // ask listener for tag information
+                    TagInformation tagInformation = currListener.findTag(messageComponents[1]);
+                    if( tagInformation != null ) {
+                        this.foundTag(tagInformation);
                     }
-                } else {
-                    throw new Exception("Invalid Message: '" + messageComponents[0] + "' - missing payload!");
                 }
-            // all other cases are invalid messages
-            default:
-                throw new Exception("Unknown Message: '" + messageComponents[0] + "'");
+            } else {
+                throw new Exception("Invalid Message: '" + messageComponents[0] + "' - missing payload!");
+            }
+        }
+        else {
+            throw new Exception("Unknown Message: '" + messageComponents[0] + "'");
         }
     }
 

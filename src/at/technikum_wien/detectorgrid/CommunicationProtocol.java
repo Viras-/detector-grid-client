@@ -30,7 +30,7 @@ public interface CommunicationProtocol {
     /**
      * Found a tag message
      */
-    public static final String MESSAGE_FOUND = "tagFound";
+    public static final String MESSAGE_FOUND = "foundTag";
     
     /**
      * Find a tag message
