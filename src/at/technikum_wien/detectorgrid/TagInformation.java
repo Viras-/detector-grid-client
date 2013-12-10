@@ -16,18 +16,13 @@
  */
 package at.technikum_wien.detectorgrid;
 
-import at.technikum_wien.detectorgridclient.communication.Listener;
+import at.technikum_wien.detectorgridclient.communication.Client;
 
 /**
  *
  * @author wkoller
  */
 public class TagInformation {
-    /**
-     * Tag for message to be sent to server
-     */
-    public static final String MESSAGE_TAG = "tagFound";
-    
     /**
      * Id of reader who discovered this tag
      */
@@ -54,13 +49,13 @@ public class TagInformation {
      */
     public String toMessage() {
         // begin message with message_tag
-        String messageContent = MESSAGE_TAG + Listener.MESSAGE_SEPARATOR;
+        String messageContent = Client.MESSAGE_FOUND + Client.MESSAGE_SEPARATOR;
         // add the reader id
-        messageContent += readerId + Listener.MESSAGE_SEPARATOR;
+        messageContent += readerId + Client.MESSAGE_SEPARATOR;
         // add the tag code
-        messageContent += tagCode + Listener.MESSAGE_SEPARATOR;
+        messageContent += tagCode + Client.MESSAGE_SEPARATOR;
         // add the distance
-        messageContent += distance + Listener.MESSAGE_SEPARATOR;
+        messageContent += distance + Client.MESSAGE_SEPARATOR;
         // add the seen tick
         messageContent += seenTick;
         

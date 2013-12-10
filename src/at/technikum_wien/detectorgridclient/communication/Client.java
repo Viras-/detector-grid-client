@@ -25,17 +25,36 @@ import java.util.Iterator;
  * @author wkoller
  */
 public abstract class Client {
+    /**
+     * Message protocol separator
+     */
+    //public static final String MESSAGE_SEPARATOR = "\u001E";
+    public static final String MESSAGE_SEPARATOR = ":";
+
+    /**
+     * Found a tag message
+     */
+    public static final String MESSAGE_FOUND = "tagFound";
+    
+    /**
+     * Find a tag message
+     */
+    public static final String MESSAGE_FIND = "findTag";
+    
+    /**
+     * Init the client
+     */
     public abstract boolean init(String address);
     
-    protected ArrayList<Listener> listeners = new ArrayList<>();
+    protected ArrayList<CommunicationListener> listeners = new ArrayList<>();
     
-    public boolean addListener(Listener listener) {
+    public boolean addListener(CommunicationListener listener) {
         listeners.add(listener);
         
         return true;
     }
     
-    public boolean removeListener(Listener listener) {
+    public boolean removeListener(CommunicationListener listener) {
         listeners.remove(listener);
         
         return true;
@@ -56,12 +75,12 @@ public abstract class Client {
         
         // determine action and trigger function for it
         switch (messageComponents[0]) {
-            case "findTag":
+            case MESSAGE_FIND:
                 // check for tag-code to find in message
                 if (messageComponents.length >= 2) {
-                    Iterator<Listener> l_it = listeners.iterator();
+                    Iterator<CommunicationListener> l_it = listeners.iterator();
                     while( l_it.hasNext() ) {
-                        Listener currListener = l_it.next();
+                        CommunicationListener currListener = l_it.next();
                         
                         // ask listener for tag information
                         TagInformation tagInformation = currListener.findTag(messageComponents[1]);

@@ -22,13 +22,7 @@ import at.technikum_wien.detectorgrid.TagInformation;
  *
  * @author wkoller
  */
-public abstract class Listener {
-
-    /**
-     * Message protocol separator
-     */
-    //public static final String MESSAGE_SEPARATOR = "\u001E";
-    public static final String MESSAGE_SEPARATOR = ":";
+public interface CommunicationListener {
 
     /**
      * Called to init the search for a specific tag

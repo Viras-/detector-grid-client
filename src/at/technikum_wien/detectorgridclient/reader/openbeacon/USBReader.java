@@ -17,7 +17,7 @@
 package at.technikum_wien.detectorgridclient.reader.openbeacon;
 
 import at.technikum_wien.detectorgrid.TagInformation;
-import at.technikum_wien.detectorgridclient.communication.Listener;
+import at.technikum_wien.detectorgridclient.communication.CommunicationListener;
 import at.technikum_wien.detectorgridclient.reader.Reader;
 import gnu.io.CommPort;
 import gnu.io.CommPortIdentifier;
@@ -25,7 +25,6 @@ import gnu.io.SerialPort;
 import gnu.io.SerialPortEvent;
 import gnu.io.SerialPortEventListener;
 import gnu.io.UnsupportedCommOperationException;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.UUID;
@@ -36,7 +35,7 @@ import java.util.logging.Logger;
  *
  * @author wkoller
  */
-public class USBReader extends Listener implements Reader, SerialPortEventListener {
+public class USBReader implements CommunicationListener, Reader, SerialPortEventListener {
     /**
      * Define the serial port to listen on
      */

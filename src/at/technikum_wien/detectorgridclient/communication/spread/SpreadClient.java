@@ -18,7 +18,7 @@ package at.technikum_wien.detectorgridclient.communication.spread;
 
 import at.technikum_wien.detectorgrid.TagInformation;
 import at.technikum_wien.detectorgridclient.communication.Client;
-import at.technikum_wien.detectorgridclient.communication.Listener;
+import at.technikum_wien.detectorgridclient.communication.CommunicationListener;
 import java.io.UnsupportedEncodingException;
 import java.net.InetAddress;
 import java.util.HashMap;
@@ -56,7 +56,7 @@ public class SpreadClient extends Client {
     /**
      * List of all listeners in conjunction with their spread listener
      */
-    protected HashMap<Listener, SpreadMessageListener> spreadListeners = new HashMap<>();
+    protected HashMap<CommunicationListener, SpreadMessageListener> spreadListeners = new HashMap<>();
 
     /**
      * Init the client and open connection to spread daemon
@@ -90,7 +90,7 @@ public class SpreadClient extends Client {
      * @return
      */
     @Override
-    public boolean addListener(Listener listener) {
+    public boolean addListener(CommunicationListener listener) {
         super.addListener(listener);
         
         // add a new spreadlistener wrapper
@@ -110,7 +110,7 @@ public class SpreadClient extends Client {
      * @return
      */
     @Override
-    public boolean removeListener(Listener listener) {
+    public boolean removeListener(CommunicationListener listener) {
         super.removeListener(listener);
         
         // remove listener from spread and all references to the object

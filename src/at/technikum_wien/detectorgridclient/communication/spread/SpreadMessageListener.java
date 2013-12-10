@@ -16,7 +16,8 @@
  */
 package at.technikum_wien.detectorgridclient.communication.spread;
 
-import at.technikum_wien.detectorgridclient.communication.Listener;
+import at.technikum_wien.detectorgridclient.communication.Client;
+import at.technikum_wien.detectorgridclient.communication.CommunicationListener;
 import java.io.UnsupportedEncodingException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -31,7 +32,7 @@ public class SpreadMessageListener implements BasicMessageListener {
     /**
      * Reference to detector-grid client listeners
      */
-    protected Listener listener = null;
+    protected CommunicationListener listener = null;
     
     protected SpreadClient spreadClient = null;
 
@@ -39,7 +40,7 @@ public class SpreadMessageListener implements BasicMessageListener {
      * Construct the SpreadListener to wrap the given detector-grid client listener
      * @param lstnr 
      */
-    public SpreadMessageListener(Listener lstnr, SpreadClient sprdClnt) {
+    public SpreadMessageListener(CommunicationListener lstnr, SpreadClient sprdClnt) {
         listener = lstnr;
         spreadClient = sprdClnt;
     }
@@ -56,7 +57,7 @@ public class SpreadMessageListener implements BasicMessageListener {
                 Logger.getLogger(SpreadMessageListener.class.getName()).log(Level.FINE, "New Message: ''{0}''", messageContent);
                 
                 // sepearate message into components and start actions from it
-                String[] messageComponents = messageContent.split(Listener.MESSAGE_SEPARATOR);
+                String[] messageComponents = messageContent.split(Client.MESSAGE_SEPARATOR);
                 try {
                     spreadClient.handleMessage(messageComponents);
                 } catch (Exception ex) {
