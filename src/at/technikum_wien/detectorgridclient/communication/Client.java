@@ -16,6 +16,7 @@
  */
 package at.technikum_wien.detectorgridclient.communication;
 
+import at.technikum_wien.detectorgrid.CommunicationProtocol;
 import at.technikum_wien.detectorgrid.TagInformation;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -24,23 +25,7 @@ import java.util.Iterator;
  *
  * @author wkoller
  */
-public abstract class Client {
-    /**
-     * Message protocol separator
-     */
-    //public static final String MESSAGE_SEPARATOR = "\u001E";
-    public static final String MESSAGE_SEPARATOR = ":";
-
-    /**
-     * Found a tag message
-     */
-    public static final String MESSAGE_FOUND = "tagFound";
-    
-    /**
-     * Find a tag message
-     */
-    public static final String MESSAGE_FIND = "findTag";
-    
+public abstract class Client implements CommunicationProtocol {
     /**
      * Init the client
      */
