@@ -33,15 +33,11 @@ import org.apache.commons.cli.ParseException;
  * @author wkoller
  */
 public class DetectorGridClient {
-    protected String host = "";
-
-    public DetectorGridClient(String hst, String uuid) throws Exception {
-        host = hst;
-        
-        SpreadClient spreadClient = new SpreadClient();
+    public DetectorGridClient(String host, String uuid, String device) throws Exception {
+        SpreadClient spreadClient = new SpreadClient(uuid);
         spreadClient.init(host);
         
-        USBReader uSBReader = new USBReader(uuid);
+        USBReader uSBReader = new USBReader(uuid, device);
         spreadClient.addListener(uSBReader);
     }
     
@@ -55,6 +51,7 @@ public class DetectorGridClient {
         options.addOption("h", "host", true, "Name of host to connect to (defaults to localhost)");
         options.addOption("?", "help", false, "Display help information");
         options.addOption("u", "uuid", true, "UUID to use for this reader");
+        options.addOption("d", "device", true, "Device to read from (e.g. /dev/ttyACM0");
         
         CommandLineParser clp = new BasicParser();
         try {
@@ -69,11 +66,14 @@ public class DetectorGridClient {
                 // fetch the UUID from the options
                 String uuid = cmd.getOptionValue("uuid", UUID.randomUUID().toString());
                 
+                // fech the device from the options
+                String device = cmd.getOptionValue("device", "/dev/ttyACM0");
+                
                 // fetch the host from the options
                 String host = cmd.getOptionValue("h", "localhost");
                 try {
                     // create class instance to start the logic
-                    new DetectorGridClient(host, uuid);
+                    new DetectorGridClient(host, uuid, device);
                 } catch (Exception ex) {
                     Logger.getLogger(DetectorGridClient.class.getName()).log(Level.SEVERE, "Unable to start main detector grid", ex);
                 }
