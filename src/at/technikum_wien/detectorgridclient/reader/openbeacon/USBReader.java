@@ -37,11 +37,6 @@ import java.util.logging.Logger;
  */
 public class USBReader implements CommunicationListener, Reader, SerialPortEventListener {
     /**
-     * Define the serial port to listen on
-     */
-    public static final String COMM_PORT = "/dev/ttyACM0";
-    
-    /**
      * Separator for message coming in from serial port
      */
     public static final String SERIAL_SEPARATOR = ": ";
@@ -75,12 +70,14 @@ public class USBReader implements CommunicationListener, Reader, SerialPortEvent
      * Initialize the OpenBeacon USB reader and start reading from it
      * @throws Exception 
      */
-    public USBReader(String uuid) throws Exception {
+    public USBReader(String uuid, String device) throws Exception {
         // assigned uuid
         readerUUID = uuid;
         
+        System.err.println("Device: " + device);
+        
         // get the identifier for the specified comm port
-        CommPortIdentifier commPortIdentifier = CommPortIdentifier.getPortIdentifier(COMM_PORT);
+        CommPortIdentifier commPortIdentifier = CommPortIdentifier.getPortIdentifier(device);
         if( commPortIdentifier.isCurrentlyOwned() ) {
             throw new IllegalAccessException("Comm port is currently in use");
         }
