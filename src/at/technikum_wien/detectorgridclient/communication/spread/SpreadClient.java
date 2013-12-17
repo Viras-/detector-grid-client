@@ -57,6 +57,19 @@ public class SpreadClient extends Client {
      * List of all listeners in conjunction with their spread listener
      */
     protected HashMap<CommunicationListener, SpreadMessageListener> spreadListeners = new HashMap<>();
+    
+    /**
+     * UUID to use for connection to spread
+     */
+    protected String uuid = null;
+
+    /**
+     * Special constructor for spread client
+     * @param uuid 
+     */
+    public SpreadClient(String uuid) {
+        this.uuid = uuid;
+    }
 
     /**
      * Init the client and open connection to spread daemon
@@ -69,7 +82,7 @@ public class SpreadClient extends Client {
         try {
             // open the connection to the spread daemon
             spreadConnection = new SpreadConnection();
-            spreadConnection.connect(InetAddress.getByName(address), 0, "private", true, false);
+            spreadConnection.connect(InetAddress.getByName(address), 0, this.uuid, true, false);
 
             // join the default group for the detector grid application
             listenSpreadGroup = new SpreadGroup();
