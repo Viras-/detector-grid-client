@@ -35,7 +35,9 @@ import org.apache.commons.cli.ParseException;
 public class DetectorGridClient {
     public DetectorGridClient(String host, String uuid, String device) throws Exception {
         SpreadClient spreadClient = new SpreadClient(uuid);
-        spreadClient.init(host);
+        if( !spreadClient.init(host) ) {
+            throw new Exception("Unable to start SpreadClient - exiting!");
+        }
         
         USBReader uSBReader = new USBReader(uuid, device);
         spreadClient.addListener(uSBReader);
@@ -51,7 +53,7 @@ public class DetectorGridClient {
         options.addOption("h", "host", true, "Name of host to connect to (defaults to localhost)");
         options.addOption("?", "help", false, "Display help information");
         options.addOption("u", "uuid", true, "UUID to use for this reader");
-        options.addOption("d", "device", true, "Device to read from (e.g. /dev/ttyACM0");
+        options.addOption("d", "device", true, "Device to read from (e.g. /dev/ttyACM0)");
         
         CommandLineParser clp = new BasicParser();
         try {
@@ -71,24 +73,16 @@ public class DetectorGridClient {
                 
                 // fetch the host from the options
                 String host = cmd.getOptionValue("h", "localhost");
-                try {
-                    // create class instance to start the logic
-                    new DetectorGridClient(host, uuid, device);
-                } catch (Exception ex) {
-                    Logger.getLogger(DetectorGridClient.class.getName()).log(Level.SEVERE, "Unable to start main detector grid", ex);
-                }
+                // create class instance to start the logic
+                new DetectorGridClient(host, uuid, device);
 
                 // let the listening threads do their work...
                 while(true) {
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException ex) {
-                        Logger.getLogger(DetectorGridClient.class.getName()).log(Level.SEVERE, "Error while executing main loop", ex);
-                    }
+                    Thread.sleep(1000);
                 }
             }
-        } catch (ParseException ex) {
-            Logger.getLogger(DetectorGridClient.class.getName()).log(Level.SEVERE, "Error while parsing command line parameters", ex);
+        } catch (Exception ex) {
+            Logger.getLogger(DetectorGridClient.class.getName()).log(Level.SEVERE, "Error while running DetectorGridClient", ex);
         }
     }
 }
